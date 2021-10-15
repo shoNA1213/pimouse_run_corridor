@@ -36,4 +36,4 @@ class WallTraceTest(unittest.TestCase):
 if __name__ == '__main__':
     time.sleep(3)
     rospy.init_node('travis_test_wall_trace')
-    rostest.rosrun('pimouse_run_corridor','travis_test_wall_trace',WallStopTraceTest)
+    rostest.rosrun('pimouse_run_corridor','travis_test_wall_trace',WallTraceTest)
