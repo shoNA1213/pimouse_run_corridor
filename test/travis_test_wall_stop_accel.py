@@ -21,8 +21,8 @@ class WallStopAccelTest(unittest.TestCase):
         left, right = self.set_and_get(400,100,100,0) #total: 600
         self.assertTrue(left == right == 0,"can't stop")
 
-        left, right = self.set_and_get(40,0,0,9) #total: 49
-        self.assertTrue(0 < left == right < 1000,"can't move again")
+        left, right = self.set_and_get(40,0,0,9) #toal: 49
+        self.assertTrue(0 < left == right < 1000, "can't move again")
 
         time.sleep(5.0)
         left, right = self.set_and_get(40,0,0,9) #total: 49
