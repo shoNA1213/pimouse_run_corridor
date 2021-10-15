@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-import rospy,copy
+import rospy,copy,math
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger, TriggerResponse
 from pimouse_ros.msg import LightSensorValues
 
-class WallStop():
+class WallTrace():
     def __init__(self):
         self.cmd_vel = rospy.Publisher('/cmd_vel',Twist,queue_size=1)
 
@@ -15,20 +15,29 @@ class WallStop():
         self.sensor_values = messages
 
     def run(self):
-        rate = rospy.Rate(10)
+        rate = rospy.Rate(20)
         data = Twist()
 
-        accel = 0.2
-        data.linear.x = 0.0
+        accel = 0.02
         while not rospy.is_shutdown():
+            s = self.sensor_values
             data.linear.x += accel
 
-            if self.sensor_values.sum_all > 50:
+            if s.sum_forward >= 50:
                 data.linear.x = 0.0
             elif data.linear.x <= 0.2:
                 data.linear.x = 0.2
-            elif data.linear.x >= 0.8:          
+            elif data.linear.x >= 0.8:
                 data.linear.x = 0.8
+
+            if data.linear.x < 0.2:
+                data.angular.z = 0.0
+            elif s.left_side < 10:
+                data.angular.z = 0.0
+            else:
+                target = 50
+                error = (target - s.left_side)/50.0
+                data.angular.z = error * 3 * math.pi / 180.0
 
             self.cmd_vel.publish(data)
             rate.sleep()
