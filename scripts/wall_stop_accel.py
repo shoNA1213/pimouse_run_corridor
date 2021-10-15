@@ -23,15 +23,18 @@ class WallStop():
         while not rospy.is_shutdown():
             data.linear.x += accel
 
-            if self.sensor_values.sum_all >= 50: data.linear.x = 0.0
-            elif data.linear.x <= 0.2:           data.linear.x = 0.2
-            elif data.linear.x >= 0.8:           data.linear.x = 0.8
+            if self.sensor_values.sum_all > 50:
+                data.linear.x = 0.0
+            elif data.linear.x <= 0.2:
+                data.linear.x = 0.2
+            elif data.linear.x >= 0.8:          
+                data.linear.x = 0.8
 
             self.cmd_vel.publish(data)
             rate.sleep()
 
 if __name__ == '__main__':
-    rospy.init_node('wall_stop_accel')
+    rospy.init_node('wall_stop')
     rospy.wait_for_service('/motor_on')
     rospy.wait_for_service('/motor_off')
     rospy.on_shutdown(rospy.ServiceProxy('/motor_off',Trigger).call)
