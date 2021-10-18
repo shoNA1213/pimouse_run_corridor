@@ -27,7 +27,7 @@ class WallStopAccel():
                 data.linear.x = 0.0
             elif data.linear.x <= 0.2:
                 data.linear.x = 0.2
-            elif data.linear.x >= 0.8:          
+            elif data.linear.x >= 0.8:
                 data.linear.x = 0.8
 
             self.cmd_vel.publish(data)
